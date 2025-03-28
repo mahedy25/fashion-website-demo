@@ -1,8 +1,10 @@
+import { Card, CardContent } from "@/components/ui/card";
 import { HomeCard } from "@/components/ui/shared/home/home-card";
 import { HomeCarousel } from "@/components/ui/shared/home/home-carousel";
+import ProductSlider from "@/components/ui/shared/product/product-slider";
 
 import data from "@/lib/data";
-import { getAllCategories, getProductsForCard } from "@/lib/db/actions/product.actions";
+import { getAllCategories, getProductsByTag, getProductsForCard } from "@/lib/db/actions/product.actions";
 import { toSlug } from "@/lib/utils";
 
 
@@ -58,6 +60,10 @@ export default async function Page() {
       },
     },
   ];
+
+  const todayDeals = await getProductsByTag({tag: 'todays-deal'})
+
+  const bestSellingProducts = await getProductsByTag({tag: 'best-seller'})
   
 
   return (
@@ -65,6 +71,23 @@ export default async function Page() {
     <HomeCarousel items={data.carousels} />
   <div className="md:p-4 md:space-y-4 bg-border">
     <HomeCard cards={cards}/>
+
+    <Card className="w-full rounded-none">
+      <CardContent className="p-4 items-center gap-3">
+        <ProductSlider title={"Today's Deals"} products={todayDeals}/>
+      </CardContent>
+    </Card>
+
+    <Card>
+      <CardContent className="p-4 items-center gap-3">
+        <ProductSlider 
+        title={"Best Selling Products"} 
+        products={bestSellingProducts}
+        hideDetails
+        />
+      </CardContent>
+    </Card>
+
   </div>
     </>
   )
