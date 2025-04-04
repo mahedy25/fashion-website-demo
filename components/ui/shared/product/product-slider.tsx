@@ -41,7 +41,7 @@ export default function ProductSlider({
             >
               <ProductCard
                 hideDetails={hideDetails}
-                hideAddtoCart
+                hideAddToCart
                 hideBorder
                 product={product}
               />
