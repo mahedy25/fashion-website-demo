@@ -16,6 +16,9 @@ const initialState: Cart = {
 interface CartState {
   cart: Cart
   addItem: (item: OrderItem, quantity: number) => Promise<string>
+  updateItem: (item: OrderItem, quantity: number) => Promise<void>
+  removeItem: (item: OrderItem) => Promise<void>
+  init: () => void
 }
 
 const useCartState = create(
@@ -52,25 +55,77 @@ const useCartState = create(
             )
           : [...items, { ...item, quantity }]
 
+        const deliveryDetails = await calcDeliveryDateAndPrice({ items: updatedCartItems })
+
         set({
           cart: {
             ...get().cart,
             items: updatedCartItems,
-            ...(await calcDeliveryDateAndPrice({ items: updatedCartItems })),
+            ...deliveryDetails,
           },
         })
 
         localStorage.setItem('cart', JSON.stringify(updatedCartItems))
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+        return (
+          updatedCartItems.find(
+            (x) =>
+              x.product === item.product &&
+              x.color === item.color &&
+              x.size === item.size
+          )?.clientId || ''
+        )
+      },
 
-        return updatedCartItems.find(
+      updateItem: async (item: OrderItem, quantity: number) => {
+        const { items } = get().cart
+        const exist = items.find(
           (x) =>
             x.product === item.product &&
             x.color === item.color &&
             x.size === item.size
-        )?.clientId || ''
+        )
+        if (!exist) return
+
+        const updatedCartItems = items.map((x) =>
+          x.product === item.product &&
+          x.color === item.color &&
+          x.size === item.size
+            ? { ...exist, quantity }
+            : x
+        )
+
+        const deliveryDetails = await calcDeliveryDateAndPrice({ items: updatedCartItems })
+
+        set({
+          cart: {
+            ...get().cart,
+            items: updatedCartItems,
+            ...deliveryDetails,
+          },
+        })
       },
+
+      removeItem: async (item: OrderItem) => {
+        const { items } = get().cart
+        const updatedCartItems = items.filter(
+          (x) =>
+            x.product !== item.product ||
+            x.color !== item.color ||
+            x.size !== item.size
+        )
+
+        const deliveryDetails = await calcDeliveryDateAndPrice({ items: updatedCartItems })
+
+        set({
+          cart: {
+            ...get().cart,
+            items: updatedCartItems,
+            ...deliveryDetails,
+          },
+        })
+      },
+
       init: () => set({ cart: initialState }),
     }),
      {
@@ -80,3 +135,4 @@ const useCartState = create(
 )
 
 export default useCartState
+
