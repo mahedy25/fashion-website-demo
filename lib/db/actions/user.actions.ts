@@ -1,8 +1,14 @@
 'use server'
 
 import { signIn, signOut } from '@/auth'
-import { IUserSignIn } from '@/types'
+import { UserSignUpSchema } from '@/lib/validator'
+import { IUserSignIn, IUserSignUp } from '@/types'
 import { redirect } from 'next/navigation'
+import { connectToDatabase } from '..'
+import User from '../models/user.model'
+import bcrypt from 'bcryptjs'
+import { formatError } from '@/lib/utils'
+
 
 
 export async function signInWithCredentials(user: IUserSignIn) {
@@ -12,4 +18,25 @@ export async function signInWithCredentials(user: IUserSignIn) {
 export const SignOut = async () => {
   const redirectTo = await signOut({ redirect: false })
   redirect(redirectTo.redirect)
+}
+
+// CREATE
+export async function registerUser(userSignUp: IUserSignUp) {
+  try {
+    const user = await UserSignUpSchema.parseAsync({
+      name: userSignUp.name,
+      email: userSignUp.email,
+      password: userSignUp.password,
+      confirmPassword: userSignUp.confirmPassword,
+    })
+
+    await connectToDatabase()
+    await User.create({
+      ...user,
+      password: await bcrypt.hash(user.password, 5),
+    })
+    return { success: true, message: 'User created successfully' }
+  } catch (error) {
+    return { success: false, error: formatError(error) }
+  }
 }
