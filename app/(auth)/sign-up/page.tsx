@@ -9,17 +9,18 @@ export const metadata: Metadata = {
   title: 'Sign Up',
 }
 
-export default async function SignUpPage({
-  searchParams,
-}: {
-  searchParams: {
+type SignUpPageProps = {
+  searchParams?: {
     callbackUrl?: string
   }
-}) {
+}
+
+export default async function SignUpPage(props: SignUpPageProps) {
   const session = await auth()
+  const callbackUrl = props.searchParams?.callbackUrl || '/'
 
   if (session) {
-    return redirect(searchParams?.callbackUrl || '/')
+    return redirect(callbackUrl)
   }
 
   return (
