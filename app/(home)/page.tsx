@@ -11,6 +11,9 @@ import { toSlug } from "@/lib/utils";
 
 export default async function Page() {
   const categories = (await getAllCategories()).slice(0, 4)
+
+  console.log('Categories:', categories);
+
   const newArrivals = await  getProductsForCard({
     tag: 'new-arrival',
     limit: 4
@@ -35,6 +38,8 @@ export default async function Page() {
         image: `/images/${toSlug(category)}.jpg`,
         href: `/search?category=${category}`
       }))
+
+ 
     },
     {
       title: "Explore New Arrivals",

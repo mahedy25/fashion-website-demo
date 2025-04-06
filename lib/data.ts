@@ -1023,7 +1023,7 @@ const data: Data = {
           title:"Best Deals On Wrist Watches",
           buttonCaption:"Shop Now",
           image:"/images/banner2.jpg",
-          url:"/search?category=Wrist Watches",
+          url:"/search?category=wrist-watches",
           isPublished: true,
         },
     ],
