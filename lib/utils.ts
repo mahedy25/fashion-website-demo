@@ -79,3 +79,85 @@ export const formatError = (error: AnyError): string => {
     ? error.message
     : JSON.stringify(error.message ?? 'Something went wrong. Please try again.')
 }
+
+// Get month name from a string like "2025-04"
+export function getMonthName(yearAndMonth: string): string {
+  const [year, month] = yearAndMonth.split('-')
+
+  const yearNum = parseInt(year)
+  const monthNum = parseInt(month)
+
+  if (isNaN(yearNum) || isNaN(monthNum) || monthNum < 1 || monthNum > 12) {
+    return 'Invalid date'
+  }
+
+  const targetDate = new Date(yearNum, monthNum - 1)
+  const now = new Date()
+
+  const isOngoing =
+    now.getFullYear() === targetDate.getFullYear() &&
+    now.getMonth() === targetDate.getMonth()
+
+  const monthName = targetDate.toLocaleString('default', { month: 'long' })
+
+  return isOngoing ? `${monthName} (ongoing)` : monthName
+}
+
+// Calculate a past date by subtracting `days` from the current date
+export function calculatePastDate(days: number): Date {
+  const currentDate = new Date()
+  currentDate.setDate(currentDate.getDate() - days)
+  return currentDate
+}
+
+// Calculate a future date by adding `days` to the current date
+export function calculateFutureDate(days: number): Date {
+  const currentDate = new Date()
+  currentDate.setDate(currentDate.getDate() + days)
+  return currentDate
+}
+
+// Get time remaining until midnight (00:00)
+export function timeUntilMidnight(): { hours: number; minutes: number } {
+  const now = new Date()
+  const midnight = new Date()
+  midnight.setHours(24, 0, 0, 0)
+
+  const diff = midnight.getTime() - now.getTime()
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+
+  return { hours, minutes }
+}
+
+// Format a date object into full, date-only, and time-only strings
+export const formatDateTime = (dateInput: Date | string) => {
+  const date = new Date(dateInput)
+
+  const dateTimeOptions: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    year: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  }
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    month: 'short',
+    year: 'numeric',
+    day: 'numeric',
+  }
+
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  }
+
+  return {
+    dateTime: date.toLocaleString('en-US', dateTimeOptions),
+    dateOnly: date.toLocaleString('en-US', dateOptions),
+    timeOnly: date.toLocaleString('en-US', timeOptions),
+  }
+}

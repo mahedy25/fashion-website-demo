@@ -1,31 +1,57 @@
-import { OrderItem } from '@/types'
+import { OrderItem, ShippingAddress } from '@/types'
 import { round2 } from '@/lib/utils'
-import { FREE_SHIPPING_MIN_PRICE } from '@/lib/constants'
-
+import { AVAILABLE_DELIVERY_DATES } from '@/lib/constants'
 
 export const calcDeliveryDateAndPrice = async ({
   items,
+  shippingAddress,
+  deliveryDateIndex,
 }: {
   deliveryDateIndex?: number
   items: OrderItem[]
+  shippingAddress?: ShippingAddress
 }) => {
+  // Calculate total price of items
   const itemsPrice = round2(
     items.reduce((acc, item) => acc + item.price * item.quantity, 0)
   )
 
-  const shippingPrice = itemsPrice > FREE_SHIPPING_MIN_PRICE ? 0 : 5
-  const taxPrice = round2(itemsPrice * 0.15)
+  // Determine which delivery date to use
+  const deliveryDate =
+    AVAILABLE_DELIVERY_DATES[
+      deliveryDateIndex === undefined
+        ? AVAILABLE_DELIVERY_DATES.length - 1
+        : deliveryDateIndex
+    ]
+
+  // Calculate shipping price
+  const shippingPrice =
+    !shippingAddress || !deliveryDate
+      ? undefined
+      : deliveryDate.freeShippingMinPrice > 0 &&
+        itemsPrice > deliveryDate.freeShippingMinPrice
+      ? 0
+      : deliveryDate.shippingPrice
+
+  // Calculate tax (if address provided)
+  const taxPrice = !shippingAddress ? undefined : round2(itemsPrice * 0.15)
+
+  // Calculate total price
   const totalPrice = round2(
     itemsPrice +
-       (shippingPrice ? round2(shippingPrice) : 0) +
-       (taxPrice ? round2(taxPrice) : 0)
+      (shippingPrice !== undefined ? round2(shippingPrice) : 0) +
+      (taxPrice !== undefined ? round2(taxPrice) : 0)
   )
-    
+
   return {
+    AVAILABLE_DELIVERY_DATES,
+    deliveryDateIndex:
+      deliveryDateIndex === undefined
+        ? AVAILABLE_DELIVERY_DATES.length - 1
+        : deliveryDateIndex,
     itemsPrice,
     shippingPrice,
     taxPrice,
     totalPrice,
   }
 }
-
