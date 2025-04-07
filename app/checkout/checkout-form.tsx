@@ -54,7 +54,7 @@ const shippingAddressDefaultValues =
         street: 'Saraipara',
         city: 'Chattogram',
         province: 'Quebec',
-        phone: '01602450413',
+        Phone: '01602450413',
         postalCode: '4204',
         country: 'Bangladesh',
       }
@@ -63,7 +63,7 @@ const shippingAddressDefaultValues =
         street: '',
         city: '',
         province: '',
-        phone: '',
+        Phone: '',
         postalCode: '',
         country: '',
       }
@@ -108,7 +108,7 @@ const shippingAddressDefaultValues =
           shippingAddressForm.setValue('country', shippingAddress.country)
           shippingAddressForm.setValue('postalCode', shippingAddress.postalCode)
           shippingAddressForm.setValue('province', shippingAddress.province)
-          shippingAddressForm.setValue('phone', shippingAddress.phone)
+          shippingAddressForm.setValue('Phone', shippingAddress.Phone)
         }, [items, isMounted, router, shippingAddress, shippingAddressForm])
       
         const [isAddressSelected, setIsAddressSelected] = useState<boolean>(false)
@@ -393,7 +393,7 @@ const shippingAddressDefaultValues =
                           />
                           <FormField
                             control={shippingAddressForm.control}
-                            name='phone'
+                            name='Phone'
                             render={({ field }) => (
                               <FormItem className='w-full'>
                                 <FormLabel>Phone number</FormLabel>
