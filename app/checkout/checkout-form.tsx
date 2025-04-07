@@ -43,6 +43,9 @@ import {
   AVAILABLE_PAYMENT_METHODS,
   DEFAULT_PAYMENT_METHOD,
 } from '@/lib/constants'
+import { toast } from 'sonner'
+import { createOrder } from '@/lib/db/actions/order.actions'
+
 
 const shippingAddressDefaultValues =
   process.env.NODE_ENV === 'development'
@@ -51,7 +54,7 @@ const shippingAddressDefaultValues =
         street: 'Saraipara',
         city: 'Chattogram',
         province: 'Quebec',
-        Phone: '01602450413',
+        phone: '01602450413',
         postalCode: '4204',
         country: 'Bangladesh',
       }
@@ -83,6 +86,7 @@ const shippingAddressDefaultValues =
           setPaymentMethod,
           updateItem,
           removeItem,
+          clearCart,
           setDeliveryDateIndex,
         } = useCartStore()
         const isMounted = useIsMounted()
@@ -104,7 +108,7 @@ const shippingAddressDefaultValues =
           shippingAddressForm.setValue('country', shippingAddress.country)
           shippingAddressForm.setValue('postalCode', shippingAddress.postalCode)
           shippingAddressForm.setValue('province', shippingAddress.province)
-          shippingAddressForm.setValue('Phone', shippingAddress.Phone)
+          shippingAddressForm.setValue('phone', shippingAddress.phone)
         }, [items, isMounted, router, shippingAddress, shippingAddressForm])
       
         const [isAddressSelected, setIsAddressSelected] = useState<boolean>(false)
@@ -113,9 +117,31 @@ const shippingAddressDefaultValues =
         const [isDeliveryDateSelected, setIsDeliveryDateSelected] =
           useState<boolean>(false)
       
-        const handlePlaceOrder = async () => {
-          // TODO: place order
-        }
+          const handlePlaceOrder = async () => {
+            const res = await createOrder({
+              items,
+              shippingAddress,
+              expectedDeliveryDate: calculateFutureDate(
+                AVAILABLE_DELIVERY_DATES[deliveryDateIndex!].daysToDeliver
+              ),
+              deliveryDateIndex,
+              paymentMethod,
+              itemsPrice,
+              shippingPrice,
+              taxPrice,
+              totalPrice,
+            })
+          
+            if (!res.success) {
+              toast.error(res.message)
+            } else {
+              toast.success(res.message)
+              clearCart()
+              router.push(`/checkout/${res.data?.orderId}`)
+            }
+          }
+          
+          
         const handleSelectPaymentMethod = () => {
           setIsAddressSelected(true)
           setIsPaymentMethodSelected(true)
@@ -367,7 +393,7 @@ const shippingAddressDefaultValues =
                           />
                           <FormField
                             control={shippingAddressForm.control}
-                            name='Phone'
+                            name='phone'
                             render={({ field }) => (
                               <FormItem className='w-full'>
                                 <FormLabel>Phone number</FormLabel>
