@@ -79,7 +79,7 @@ export default function RatingSummary({
             <RatingDistribution />
             <Separator />
             <Link className='highlight-link text-center' href='#reviews'>
-              {numReviews} ratings
+              See Customer Reviews
             </Link>
           </div>
         </PopoverContent>
@@ -87,7 +87,7 @@ export default function RatingSummary({
 
       <div>
         <Link href='#reviews' className='highlight-link'>
-          {numReviews} ratings
+        {numReviews} ratings
         </Link>
       </div>
     </div>
