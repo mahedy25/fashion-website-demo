@@ -18,16 +18,20 @@ import CheckoutFooter from '../checkout-footer'
 import { redirect, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import ProductPrice from '@/components/ui/shared/product/product-price' 
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
+import StripeForm from './stripe-form'
 
 
 export default function OrderDetailsForm({
   order,
   paypalClientId,
-
+  clientSecret,
 }: {
   order: IOrder
   paypalClientId: string
   isAdmin: boolean
+  clientSecret: string | null
 }) {
   const router = useRouter()
   const {
@@ -124,8 +128,7 @@ export default function OrderDetailsForm({
                 </PayPalScriptProvider>
               </div>
             )}
-
-            {/* Stripe 
+ 
             {!isPaid && paymentMethod === 'Stripe' && clientSecret && (
               <Elements
                 options={{
@@ -139,7 +142,7 @@ export default function OrderDetailsForm({
                 />
               </Elements>
             )}
-              */}
+  
 
             {!isPaid && paymentMethod === 'Cash On Delivery' && (
               <Button
@@ -154,6 +157,8 @@ export default function OrderDetailsForm({
       </CardContent>
     </Card>
   )
+
+  const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as  string);
 
   return (
     <main className='max-w-6xl mx-auto'>
