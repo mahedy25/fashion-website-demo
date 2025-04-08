@@ -120,6 +120,10 @@
     @apply cursor-pointer p-1 border border-transparent hover:border-white rounded-[2xl];
   }
 
+  .item-button {
+    @apply p-3 hover:bg-muted hover:no-underline;
+  }
+
   .flex-between {
     @apply flex justify-between items-center
   }
@@ -130,4 +134,8 @@
     @apply font-bold text-2xl lg:text-3xl;
   }
 }
+
+ .h2-bold {
+    @apply font-bold text-lg lg:text-xl;
+  }
 
