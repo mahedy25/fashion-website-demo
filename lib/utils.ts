@@ -161,3 +161,8 @@ export const formatDateTime = (dateInput: Date | string) => {
     timeOnly: date.toLocaleString('en-US', timeOptions),
   }
 }
+
+
+export function formatId(id: string) {
+  return `..${id.substring(id.length - 6)}`
+}
