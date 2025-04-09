@@ -148,22 +148,24 @@ const ProductForm = ({
                 <FormLabel>Slug</FormLabel>
 
                 <FormControl>
-                  <div className='relative'>
-                    <Input
-                      placeholder='Enter product slug'
-                      className='pl-8'
-                      {...field}
-                    />
-                    <button
-                      type='button'
-                      onClick={() => {
-                        form.setValue('slug', toSlug(form.getValues('name')))
-                      }}
-                      className='absolute right-2 top-2.5'
-                    >
-                      Generate
-                    </button>
-                  </div>
+                <div className="flex items-start gap-2">
+  <div className="flex-1">
+    <Input
+      placeholder="Enter product slug"
+      className="w-full"
+      {...field}
+    />
+  </div>
+  <button
+    type="button"
+    onClick={() => {
+      form.setValue('slug', toSlug(form.getValues('name')))
+    }}
+    className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+  >
+    Generate
+  </button>
+</div>
                 </FormControl>
 
                 <FormMessage />
