@@ -13,6 +13,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { auth } from '@/auth'
+import { toSlug } from '@/lib/utils'
 
 export default async function Sidebar({
   categories,
@@ -129,4 +130,39 @@ export default async function Sidebar({
       </DrawerContent>
     </Drawer>
   )
+}
+
+export const getFilterUrl = ({
+  params,
+  category,
+  tag,
+  sort,
+  price,
+  rating,
+  page,
+}: {
+  params: {
+    q?: string
+    category?: string
+    tag?: string
+    price?: string
+    rating?: string
+    sort?: string
+    page?: string
+  }
+  tag?: string
+  category?: string
+  sort?: string
+  price?: string
+  rating?: string
+  page?: string
+}) => {
+  const newParams = { ...params }
+  if (category) newParams.category = category
+  if (tag) newParams.tag = toSlug(tag)
+  if (price) newParams.price = price
+  if (rating) newParams.rating = rating
+  if (page) newParams.page = page
+  if (sort) newParams.sort = sort
+  return `/search?${new URLSearchParams(newParams).toString()}`
 }
