@@ -16,7 +16,7 @@ export default async function search(){
   return (
     <form action='/search' method='GET' className='flex  items-stretch h-10 '>
       <Select name='category'>
-        <SelectTrigger className='w-auto min-h-[39px] h-[39px] dark:border-gray-200 bg-gray-100 text-black border-r  rounded-r-none rounded-l-md rtl:rounded-r-md rtl:rounded-l-none'>
+        <SelectTrigger className='w-auto min-h-[39px] h-[39px] bg-gray-100 text-black dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 border-r dark:border-gray-200 rounded-r-none rounded-l-md rtl:rounded-r-md rtl:rounded-l-none font-semibold'>
           <SelectValue placeholder='All'/>
         </SelectTrigger>
         <SelectContent position='popper'>
@@ -29,11 +29,12 @@ export default async function search(){
         </SelectContent>
       </Select>
       <Input
-        className='flex-1 rounded-none dark:border-gray-200 bg-gray-100 text-black text-base h-[39px]'
-    placeholder={`Search in ${APP_NAME}`}
-        name='q'
-        type='search'
-      />
+  className='flex-1 rounded-none bg-gray-100 text-black dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 text-base h-[39px]'
+  placeholder={`Search in ${APP_NAME}`}
+  name='q'
+  type='search'
+/>
+
       <button
         type='submit'
         className='bg-primary  text-black rounded-s-none rounded-e-md h-fit px-3 py-2 hover:bg-primary/90'
