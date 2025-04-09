@@ -35,12 +35,12 @@ export default async function search(){
   type='search'
 />
 
-      <button
-        type='submit'
-        className='bg-primary  text-black rounded-s-none rounded-e-md h-fit px-3 py-2 hover:bg-primary/90'
-      >
-        <SearchIcon className='w-6 h-6' />
-      </button>
+<button
+  type='submit'
+  className='bg-primary text-black rounded-s-none rounded-e-md h-[39px] w-[42px] flex items-center justify-center hover:bg-primary/90'
+>
+  <SearchIcon className='w-5 h-5' />
+</button>
     </form>
   )
 }
