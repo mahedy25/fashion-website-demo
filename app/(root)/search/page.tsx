@@ -282,6 +282,13 @@ export default async function SearchPage(props: {
           {data.totalPages > 1 && (
             <Pagination page={page} totalPages={data.totalPages} />
           )}
+
+          {/* ✅ Pagination goes right here */}
+  {data.totalPages > 1 && (
+    <Pagination page={page} totalPages={data.totalPages} />
+  )}
+
+
         </div>
       </div>
     </div>

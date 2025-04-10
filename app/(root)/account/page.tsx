@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Home, PackageCheckIcon, User } from 'lucide-react'
 import { Metadata } from 'next'
 import Link from 'next/link'
-import React from 'react'
+import Pagination from '@/components/ui/shared/pagination'
 
 const PAGE_TITLE = 'Your Account'
 
@@ -11,7 +11,12 @@ export const metadata: Metadata = {
   title: PAGE_TITLE,
 }
 
+// Assuming orders is coming as a prop or from another source
+const orders = { totalPages: 5 }; // You can replace this with actual data
+
 export default function AccountPage() {
+  const page = 1; // You can replace this with the actual page number
+
   return (
     <div>
       <h1 className='h1-bold py-4'>{PAGE_TITLE}</h1>
@@ -72,6 +77,9 @@ export default function AccountPage() {
 
       {/* Browsing history section */}
       <BrowsingHistoryList className='mt-16' />
+
+      {/* Pagination */}
+      <Pagination page={page} totalPages={orders?.totalPages || 0} />
     </div>
-  )
+  );
 }

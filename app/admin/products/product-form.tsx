@@ -26,6 +26,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { toSlug } from '@/lib/utils'
 import { IProductInput } from '@/types'
 import { createProduct, updateProduct } from '@/lib/db/actions/product.actions'
+import { Trash } from 'lucide-react'
 
 const productDefaultValues: IProductInput =
   process.env.NODE_ENV === 'development'
@@ -231,69 +232,65 @@ const ProductForm = ({
             )}
           />
           <FormField
-            control={form.control}
-            name='countInStock'
-            render={({ field }) => (
-              <FormItem className='w-full'>
-                <FormLabel>Count In Stock</FormLabel>
-                <FormControl>
-                  <Input
-                    type='number'
-                    placeholder='Enter product count in stock'
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+  control={form.control}
+  name='images'
+  render={() => (
+    <FormItem className='w-full'>
+      <FormLabel>Images</FormLabel>
+      <Card>
+        <CardContent className='space-y-2 mt-2 min-h-48'>
+          <div className='flex justify-start items-center flex-wrap gap-3'>
+            {images.map((image: string) => (
+              <Card key={image} className='relative w-20 h-20'>
+                <Image
+                  src={image}
+                  alt='product image'
+                  className='w-full h-full object-cover object-center rounded-sm'
+                  width={100}
+                  height={100}
+                />
+                <Button
+                  variant='destructive'
+                  className='absolute top-0 right-0 p-1'
+                  type='button'
+                  size='icon'
+                  onClick={() => {
+                    form.setValue(
+                      'images',
+                      images.filter((img) => img !== image)
+                    );
+                  }}
+                >
+                  <Trash className='w-4 h-4' />
+                </Button>
+              </Card>
+            ))}
 
-        <div className='flex flex-col gap-5 md:flex-row'>
-          <FormField
-            control={form.control}
-            name='images'
-            render={() => (
-              <FormItem className='w-full'>
-                <FormLabel>Images</FormLabel>
-                <Card>
-                  <CardContent className='space-y-2 mt-2 min-h-48'>
-                    <div className='flex justify-start items-center space-x-2'>
-                      {images.map((image: string) => (
-                        <Image
-                          key={image}
-                          src={image}
-                          alt='product image'
-                          className='w-20 h-20 object-cover object-center rounded-sm'
-                          width={100}
-                          height={100}
-                        />
-                      ))}
-                      <FormControl>
-                      <UploadButton
-className="rounded-full"
-  endpoint="imageUploader"
-  appearance={{
-    button: "bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm px-4 py-2 rounded-full transition-colors",
-  }}
-  onClientUploadComplete={(res: { url: string }[]) => {
-    form.setValue('images', [...images, res[0].url]);
-  }}
-  onUploadError={(error: Error) => {
-    toast.error(`ERROR! ${error.message}`);
-  }}
+            <FormControl>
+              <UploadButton
+                className="rounded-full"
+                endpoint="imageUploader"
+                appearance={{
+                  button:
+                    'bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm px-4 py-2 rounded-full transition-colors',
+                }}
+                onClientUploadComplete={(res: { url: string }[]) => {
+                  form.setValue('images', [...images, res[0].url]);
+                }}
+                onUploadError={(error: Error) => {
+                  toast.error(`ERROR! ${error.message}`);
+                }}
+              />
+            </FormControl>
+          </div>
+        </CardContent>
+      </Card>
+
+      <FormMessage />
+    </FormItem>
+  )}
 />
 
-                      </FormControl>
-
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
         </div>
 
         <div>

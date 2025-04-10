@@ -75,14 +75,19 @@ const useCartStore = create(
 
         localStorage.setItem('cart', JSON.stringify(updatedCartItems)) // ✅ originally present
 
-        return (
-          updatedCartItems.find(
-            (x) =>
-              x.product === item.product &&
-              x.color === item.color &&
-              x.size === item.size
-          )?.clientId || ''
-        )
+        // Added code for finding clientId
+        const foundItem = updatedCartItems.find(
+          (x) =>
+            x.product === item.product &&
+            x.color === item.color &&
+            x.size === item.size
+        )?.clientId
+
+        if (!foundItem) {
+          throw new Error('Item not found in cart')
+        }
+
+        return foundItem || '' // Ensure it returns the clientId or empty string
       },
 
       updateItem: async (item: OrderItem, quantity: number) => {

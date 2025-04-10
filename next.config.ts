@@ -3,6 +3,13 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     domains: ["utfs.io"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "utfs.io",
+        port: "",
+      },
+    ],
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
@@ -19,4 +26,5 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
 

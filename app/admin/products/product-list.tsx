@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client'
+
 import Link from 'next/link'
 
 import DeleteDialog from '@/components/ui/shared/delete-dialog'
@@ -168,26 +170,31 @@ const ProductList = () => {
             </TableBody>
           </Table>
           {(data?.totalPages ?? 0) > 1 && (
-            <div className='flex items-center gap-2'>
-              <Button
-                variant='outline'
-                onClick={() => handlePageChange('prev')}
-                disabled={Number(page) <= 1}
-                className='w-24'
-              >
-                <ChevronLeft /> Previous
-              </Button>
-              Page {page} of {data?.totalPages}
-              <Button
-                variant='outline'
-                onClick={() => handlePageChange('next')}
-                disabled={Number(page) >= (data?.totalPages ?? 0)}
-                className='w-24'
-              >
-                Next <ChevronRight />
-              </Button>
-            </div>
-          )}
+  <div className='flex items-center gap-2'>
+    <Button
+      variant='outline'
+      onClick={() => handlePageChange('prev')}
+      disabled={Number(page) <= 1}
+      className='w-24'
+    >
+      <ChevronLeft className='mr-2 h-4 w-4' /> Previous
+    </Button>
+
+    <p className='text-sm text-muted-foreground'>
+      Page {page} of {data?.totalPages}
+    </p>
+
+    <Button
+      variant='outline'
+      onClick={() => handlePageChange('next')}
+      disabled={Number(page) >= (data?.totalPages ?? 0)}
+      className='w-24'
+    >
+      Next <ChevronRight className='ml-2 h-4 w-4' />
+    </Button>
+  </div>
+)}
+
         </div>
       </div>
     </div>
