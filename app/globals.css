@@ -139,3 +139,6 @@
     @apply font-bold text-lg lg:text-xl;
   }
 
+  .web-page-content p {
+    @apply py-2;
+  }
