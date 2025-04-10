@@ -101,21 +101,21 @@ import {
               <Section className="border border-solid border-gray-500 rounded-lg p-4 md:p-6 my-4">
                 {order.items.map((item) => (
                   <Row key={item.product} className="mt-8">
-                    {/* Product image with link */}
-                    <Column className="w-20">
-                      <Link href={`${SERVER_URL}/product/${item.slug}`}>
-                        <Img
-                          width="80"
-                          alt={item.name}
-                          className="rounded"
-                          src={
-                            item.image.startsWith('/')
-                              ? `${SERVER_URL}${item.image}`
-                              : item.image
-                          }
-                        />
-                      </Link>
-                    </Column>
+                    {/* Product image wrapped with Link */}
+      <Column className="w-20">
+        <Link href={`${SERVER_URL}/product/${item.slug}`}>
+          <Img
+            width="80"
+            alt={item.name}
+            className="rounded"
+            src={
+              item.image.startsWith('/')
+                ? `${SERVER_URL}${item.image}`
+                : item.image
+            }
+          />
+        </Link>
+      </Column>
   
                     {/* Product name and quantity */}
                     <Column className="align-top">
