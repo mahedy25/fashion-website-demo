@@ -4,7 +4,8 @@ import { auth } from '@/auth'
 
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
-import PasswordForm from './password-form'
+import { PasswordForm } from './password-form'
+
 
 export const metadata: Metadata = {
   title: 'Change Password',
