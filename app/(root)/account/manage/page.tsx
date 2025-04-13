@@ -47,38 +47,40 @@ export default async function ProfilePage() {
           <Separator />
 
           {/* Email Section */}
-          <CardContent className='p-4 flex justify-between flex-wrap'>
-            <div>
-              <h3 className='font-bold'>Email</h3>
-              <p>{session?.user.email}</p>
-              <p>will be implemented in the next version</p>
-            </div>
-            <div>
-              <Link href='#'>
-                <Button disabled className='rounded-full w-32' variant='outline'>
-                  Edit
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
+          {/* Email Section */}
+<CardContent className='p-4 flex justify-between flex-wrap'>
+  <div>
+    <h3 className='font-bold'>Email</h3>
+    <p>{session?.user.email}</p>
+  </div>
+  <div>
+    <Link href='/account/manage/email'>
+      <Button className='rounded-full w-32' variant='outline'>
+        Edit
+      </Button>
+    </Link>
+  </div>
+</CardContent>
+
 
           <Separator />
 
           {/* Password Section */}
-          <CardContent className='p-4 flex justify-between flex-wrap'>
-            <div>
-              <h3 className='font-bold'>Password</h3>
-              <p>************</p>
-              <p>will be implemented in the next version</p>
-            </div>
-            <div>
-              <Link href='#'>
-                <Button disabled className='rounded-full w-32' variant='outline'>
-                  Edit
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
+<CardContent className='p-4 flex justify-between flex-wrap'>
+  <div>
+    <h3 className='font-bold'>Password</h3>
+    <p>••••••••</p> {/* Masked */}
+  </div>
+  <div>
+    <Link href='/account/manage/password'>
+      <Button className='rounded-full w-32' variant='outline'>
+        Edit
+      </Button>
+    </Link>
+  </div>
+</CardContent>
+
+
         </Card>
       </SessionProvider>
     </div>

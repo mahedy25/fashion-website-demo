@@ -1,70 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-
 import qs from 'query-string'
-
-export function formUrlQuery({
-  params,
-  key,
-  value,
-}: {
-  params: string
-  key: string
-  value: string | null
-}) {
-  const currentUrl = qs.parse(params)
-
-  currentUrl[key] = value
-
-  return qs.stringifyUrl(
-    {
-      url: window.location.pathname,
-      query: currentUrl,
-    },
-    { skipNull: true }
-  )
-}
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-
-
-export const formatNumberWithDecimal = (num: number): string => {
-  const [int, decimal] = num.toString().split('.')
-  return decimal ? `${int}.${decimal.padEnd(2, '0')}` : int
-}
-// PROMPT: [ChatGTP] create toSlug ts arrow function that convert text to lowercase, remove non-word,
-// non-whitespace, non-hyphen characters, replace whitespace, trim leading hyphens and trim trailing hyphens
-
-export const toSlug = (text: string): string =>
-  text
-    .toLowerCase()
-    .replace(/[^\w\s-]+/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/^-+|-+$/g, '')
-    .replace(/-+/g, '-')
-
-    const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
-      currency: 'USD',
-      style: 'currency',
-      minimumFractionDigits: 2,
-    })
-    export function formatCurrency(amount: number) {
-      return CURRENCY_FORMATTER.format(amount)
-    }
-    
-    const NUMBER_FORMATTER = new Intl.NumberFormat('en-US')
-    export function formatNumber(number: number) {
-      return NUMBER_FORMATTER.format(number)
-    }
-
-export const round2 = (num: number) => Math.round((num + Number.EPSILON) * 100) / 100
-
-export const generateId = () =>
-  Array.from({ length: 24 }, () => Math.floor(Math.random() * 10)).join('')
-
-
 import { ZodError } from 'zod'
 import mongoose from 'mongoose'
 
@@ -76,35 +12,91 @@ type AnyError = {
   keyValue?: Record<string, string>
 }
 
+// Classnames merge
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+// Format number with at least 2 decimal digits
+export const formatNumberWithDecimal = (num: number): string => {
+  const [int, decimal] = num.toString().split('.')
+  return decimal ? `${int}.${decimal.padEnd(2, '0')}` : int
+}
+
+// Convert string to slug
+export const toSlug = (text: string): string =>
+  text
+    .toLowerCase()
+    .replace(/[^\w\s-]+/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .replace(/-+/g, '-')
+
+// Currency formatter
+const CURRENCY_FORMATTER = new Intl.NumberFormat('en-US', {
+  currency: 'USD',
+  style: 'currency',
+  minimumFractionDigits: 2,
+})
+export function formatCurrency(amount: number) {
+  return CURRENCY_FORMATTER.format(amount)
+}
+
+// Number formatter
+const NUMBER_FORMATTER = new Intl.NumberFormat('en-US')
+export function formatNumber(number: number) {
+  return NUMBER_FORMATTER.format(number)
+}
+
+// Round to 2 decimal places
+export const round2 = (num: number) =>
+  Math.round((num + Number.EPSILON) * 100) / 100
+
+// Random ID generator (24 digits)
+export const generateId = () =>
+  Array.from({ length: 24 }, () => Math.floor(Math.random() * 10)).join('')
+
+// URL query formatter
+export function formUrlQuery({
+  params,
+  key,
+  value,
+}: {
+  params: string
+  key: string
+  value: string | null
+}) {
+  const currentUrl = qs.parse(params)
+  currentUrl[key] = value
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    { skipNull: true }
+  )
+}
+
+// Format error messages (Zod, Mongoose, MongoDB, Generic)
 export const formatError = (error: AnyError): string => {
-  // Zod validation error
   if (error instanceof ZodError) {
-    const fieldErrors = error.errors.map((err) => {
-      const path = err.path.join('.') || 'field'
-      return `${path}: ${err.message}`
-    })
-    return fieldErrors.join('. ')
+    return error.errors
+      .map((err) => `${err.path.join('.') || 'field'}: ${err.message}`)
+      .join('. ')
   }
-
-  // Mongoose validation error
   if (error instanceof mongoose.Error.ValidationError) {
-    const fieldErrors = Object.values(error.errors).map((err) => err.message)
-    return fieldErrors.join('. ')
+    return Object.values(error.errors).map((err) => err.message).join('. ')
   }
-
-  // MongoDB duplicate key error
   if (error.code === 11000 && error.keyValue) {
     const duplicateField = Object.keys(error.keyValue)[0]
     return `${duplicateField} already exists`
   }
-
-  // Generic error
   return typeof error.message === 'string'
     ? error.message
     : JSON.stringify(error.message ?? 'Something went wrong. Please try again.')
 }
 
-// Get month name from a string like "2025-04"
+// ✅ Get month name from a string like "2025-04"
 export function getMonthName(yearAndMonth: string): string {
   const [year, month] = yearAndMonth.split('-')
 
@@ -127,21 +119,21 @@ export function getMonthName(yearAndMonth: string): string {
   return isOngoing ? `${monthName} (ongoing)` : monthName
 }
 
-// Calculate a past date by subtracting `days` from the current date
+// Calculate a past date by subtracting `days` from today
 export function calculatePastDate(days: number): Date {
   const currentDate = new Date()
   currentDate.setDate(currentDate.getDate() - days)
   return currentDate
 }
 
-// Calculate a future date by adding `days` to the current date
+// Calculate a future date by adding `days` to today
 export function calculateFutureDate(days: number): Date {
   const currentDate = new Date()
   currentDate.setDate(currentDate.getDate() + days)
   return currentDate
 }
 
-// Get time remaining until midnight (00:00)
+// Time remaining until midnight
 export function timeUntilMidnight(): { hours: number; minutes: number } {
   const now = new Date()
   const midnight = new Date()
@@ -186,11 +178,12 @@ export const formatDateTime = (dateInput: Date | string) => {
   }
 }
 
-
+// Shorten an ID
 export function formatId(id: string) {
   return `..${id.substring(id.length - 6)}`
 }
 
+// Generate filter URL for search
 export const getFilterUrl = ({
   params,
   category,

@@ -134,3 +134,36 @@ export async function getUserById(userId: string) {
   if (!user) throw new Error('User not found')
   return JSON.parse(JSON.stringify(user)) as IUser
 }
+
+
+export async function updateUserEmail({ email, userId }: { email: string; userId: string }) {
+  try {
+    await connectToDatabase()
+    const user = await User.findById(userId)
+    if (!user) throw new Error('User not found')
+    
+    user.email = email
+    await user.save()
+    
+    return { success: true, message: 'Email updated successfully' }
+  } catch (error) {
+    return { success: false, message: formatError(error) }
+  }
+}
+
+
+export async function updateUserPassword({ password, userId }: { password: string; userId: string }) {
+  try {
+    await connectToDatabase()
+    const user = await User.findById(userId)
+    if (!user) throw new Error('User not found')
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    user.password = hashedPassword
+    await user.save()
+
+    return { success: true, message: 'Password updated successfully' }
+  } catch (error) {
+    return { success: false, message: formatError(error) }
+  }
+}

@@ -1,10 +1,17 @@
 import { 
+  CarouselSchema,
   CartSchema, 
+  DeliveryDateSchema, 
   OrderInputSchema, 
   OrderItemSchema, 
+  PaymentMethodSchema, 
   ProductInputSchema, 
   ReviewInputSchema, 
+   
+  SettingInputSchema, 
+   
   ShippingAddressSchema, 
+  SiteCurrencySchema, 
   UserInputSchema, 
   UserNameSchema, 
   UserSignInSchema, 
@@ -28,6 +35,8 @@ export type IProductInput = z.infer<typeof ProductInputSchema>
 export type Data = {
   users: IUserInput[]
     products: IProductInput[]
+
+    settings: ISettingInput[]
 
     webPages: IWebPageInput[]
 
@@ -72,3 +81,14 @@ export type Data = {
 
 // webpage
 export type IWebPageInput = z.infer<typeof WebPageInputSchema>
+
+// setting
+export type ICarousel = z.infer<typeof CarouselSchema>
+export type ISettingInput = z.infer<typeof SettingInputSchema>
+export type ClientSetting = ISettingInput & {
+  currency: string
+}
+
+export type SiteCurrency = z.infer<typeof SiteCurrencySchema>
+export type PaymentMethod = z.infer<typeof PaymentMethodSchema>
+export type DeliveryDate = z.infer<typeof DeliveryDateSchema>
