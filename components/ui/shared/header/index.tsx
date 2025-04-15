@@ -9,19 +9,20 @@ import { getAllCategories } from '@/lib/db/actions/product.actions'
 
 
 
+
 export default async function Header() {
   const categories = await getAllCategories()
   return (
     <header className='bg-black  text-white'>
       <div className='px-2'>
-        <div className='flex items-center justify-between'>
-          <div className='flex items-center'>
+        <div className='flex flex-col md:flex-row items-center justify-between'>
+          <div className='flex items-center '>
             <Link
               href='/'
-              className='flex items-center header-button font-extrabold text-2xl m-1 '
+              className='flex items-center header-button font-extrabold text-2xl m-2 '
             >
               <Image 
-               src="/icons/logo.svg"
+               src='/icons/appLogo.png'
                width={40}
                height={40}
                alt={`${APP_NAME} logo`}

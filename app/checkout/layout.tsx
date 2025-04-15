@@ -15,8 +15,8 @@ export default function CheckoutLayout({
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <Image
-              src="/icons/logo.svg"
-              alt="LoveAnime Logo"
+              src='/icons/appLogo.png'
+              alt="Logo"
               width={70}
               height={70}
               style={{

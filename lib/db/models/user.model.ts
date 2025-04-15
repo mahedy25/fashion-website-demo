@@ -5,6 +5,9 @@ export interface IUser extends Document, IUserInput {
   _id: string
   createdAt: Date
   updatedAt: Date
+  resetToken?: string
+resetTokenExpire?: number
+
 }
 
 const userSchema = new Schema<IUser>(
@@ -33,6 +36,12 @@ const userSchema = new Schema<IUser>(
       type: Boolean,
       default: false,
     },
+    resetToken: {
+      type: String,
+    },
+    resetTokenExpire: {
+      type: Number,
+    },
   },
   {
     timestamps: true,
@@ -43,3 +52,6 @@ const User =
   (models.User as Model<IUser>) || model<IUser>('User', userSchema)
 
 export default User
+
+
+

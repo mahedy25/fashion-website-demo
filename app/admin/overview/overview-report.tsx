@@ -84,10 +84,13 @@ export default function OverviewReport() {
 
   return (
     <div>
-      <div className='flex items-center justify-between mb-2'>
-        <h1 className='h1-bold'>Dashboard</h1>
-        <CalendarDateRangePicker defaultDate={date} setDate={setDate} />
-      </div>
+      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2'>
+  <h1 className='h1-bold'>Dashboard</h1>
+  <div className='w-full sm:w-auto'>
+    <CalendarDateRangePicker defaultDate={date} setDate={setDate} />
+  </div>
+</div>
+
       <div className='space-y-4'>
         <div className='grid gap-4  grid-cols-2 lg:grid-cols-4'>
           <Card>
@@ -98,7 +101,7 @@ export default function OverviewReport() {
               <BadgeDollarSign />
             </CardHeader>
             <CardContent className='space-y-2'>
-              <div className='text-2xl font-bold'>
+              <div className='am:text-2xl font-bold'>
                 <ProductPrice price={data.totalSales} plain />
               </div>
               <div>
@@ -114,7 +117,7 @@ export default function OverviewReport() {
               <CreditCard />
             </CardHeader>
             <CardContent className='space-y-2'>
-              <div className='text-2xl font-bold'>
+              <div className='sm:text-2xl font-bold'>
                 {formatNumber(data.ordersCount)}
               </div>
               <div>
@@ -130,7 +133,7 @@ export default function OverviewReport() {
               <Users />
             </CardHeader>
             <CardContent className='space-y-2'>
-              <div className='text-2xl font-bold'>{data.usersCount}</div>
+              <div className='sm:text-2xl font-bold'>{data.usersCount}</div>
               <div>
                 <Link className='text-xs' href='/admin/users'>
                   View customers
@@ -144,7 +147,7 @@ export default function OverviewReport() {
               <Barcode />
             </CardHeader>
             <CardContent className='space-y-2'>
-              <div className='text-2xl font-bold'>{data.productsCount}</div>
+              <div className='sm:text-2xl font-bold'>{data.productsCount}</div>
               <div>
                 <Link className='text-xs' href='/admin/products'>
                   products
@@ -189,7 +192,7 @@ export default function OverviewReport() {
         </div>
 
         <div className='grid gap-4 md:grid-cols-2'>
-          <Card>
+          <Card className='w-[90vw] md:w-full'>
             <CardHeader>
               <CardTitle>Best-Selling Categories</CardTitle>
             </CardHeader>
@@ -197,45 +200,49 @@ export default function OverviewReport() {
               <SalesCategoryPieChart data={data.topSalesCategories} />
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Sales</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Buyer</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Total</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data.latestOrders.map((order: IOrderList) => (
-                    <TableRow key={order._id}>
-                      <TableCell>
-                        {order.user ? order.user.name : 'Deleted User'}
-                      </TableCell>
 
-                      <TableCell>
-                        {formatDateTime(order.createdAt).dateOnly}
-                      </TableCell>
-                      <TableCell>
-                        <ProductPrice price={order.totalPrice} plain />
-                      </TableCell>
+          <Card className="w-full">
+  <CardHeader>
+    <CardTitle>Recent Sales</CardTitle>
+  </CardHeader>
+  <CardContent className="p-0">
+    <div className="w-full overflow-x-auto">
+      <div className="min-w-[600px]">
+        <Table className="">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Buyer</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Total</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.latestOrders.map((order: IOrderList) => (
+              <TableRow key={order._id}>
+                <TableCell>
+                  {order.user ? order.user.name : 'Deleted User'}
+                </TableCell>
+                <TableCell>
+                  {formatDateTime(order.createdAt).dateOnly}
+                </TableCell>
+                <TableCell>
+                  <ProductPrice price={order.totalPrice} plain />
+                </TableCell>
+                <TableCell>
+                  <Link href={`/admin/orders/${order._id}`}>
+                    <span className="px-2">Details</span>
+                  </Link>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  </CardContent>
+</Card>
 
-                      <TableCell>
-                        <Link href={`/admin/orders/${order._id}`}>
-                          <span className='px-2'>Details</span>
-                        </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
